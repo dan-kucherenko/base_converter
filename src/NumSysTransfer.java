@@ -50,35 +50,40 @@ public class NumSysTransfer {
     }
 
     private static String convFromDeciToBase(String numInDeci, int base) {
-
         result = "";
         power = 1;
         value = 0;
         String numInRandomBase = "";
-        if (numInDeci.contains(".")) {
-            double numInDeciDouble = Double.parseDouble(numInDeci);
-            int integerOfNum = (int) numInDeciDouble;
-//            while (integerOfNum != 0) {
-//                numInRandomBase += valToDigit(Math.abs(integerOfNum) % base);
-//                integerOfNum /= base;
-//            }
-            for (int i = 0; i < numInDeci.length(); i++) {
-                char digit = valToDigit(numInDeci.charAt(i));
-                if (digit == 45) {
-                    digit = 0;
-                    numInRandomBase += "-";
-                } else if (digit == 46) {
-                    digit = 0;
-                    numInRandomBase += ".";
-                } else
-                    numInRandomBase += Integer.toString(digit);
-            }
-            result = numInRandomBase;
+        double numInDeciDouble = Double.parseDouble(numInDeci);
+        int integerOfNum = (int) numInDeciDouble;
+        while (integerOfNum != 0) {
+            numInRandomBase += valToDigit(Math.abs(integerOfNum) % base);
+            integerOfNum /= base;
         }
-        return result;
-    }
+        result = new StringBuilder(numInRandomBase).reverse().toString() + ".";
+        if (Double.parseDouble(numInDeci) < 0)
+            result = "-" + result;
+        numInRandomBase = Double.toString(numInDeciDouble).substring(result.length(), numInDeci.length());
+        //int fractionInInt = Integer.parseInt(numInRandomBase);
+        int numerator = Integer.parseInt(numInRandomBase);
+        int denominator = (int) Math.pow(10, numInRandomBase.length());
+        numInRandomBase = "";
+        for (int i = 0; i < numInDeci.length() && i < 3; i++) {
+            numerator *= base;
+            numInRandomBase += valToDigit(numerator / denominator);
+            numerator %= denominator;
+            if (numerator == 0)
+                break;
+        }
 
-    //result+=s;
+
+//        while (fractionInInt > 0) {
+//            numInRandomBase += valToDigit(fractionInInt * base);
+//            fractionInInt /= base;
+//        }
+        result += numInRandomBase;
+        return result;
+        //result+=s;
 //        if ((int) numInDeciDouble < 0)
 //            result += "-";
 //        result = new
@@ -115,7 +120,7 @@ public class NumSysTransfer {
 //                result += "-";
 //            return new StringBuffer(result).reverse().toString();
 //        }
-
+    }
 
     private static int digitToVal(char c) {
         if (c >= '0' && c <= '9')
@@ -131,13 +136,8 @@ public class NumSysTransfer {
     private static char valToDigit(int num) {
         if (num >= 0 && num <= 9)
             return (char) (num + 48);
-        else if (num == 46)
-            return 0;
-        else if (num == 45)
-            return 0;
         else
             return (char) (num + 55);
-
     }
 
     private static String numSysTransfer(int startingNumSys, int numSysToTransfer, String num) {
