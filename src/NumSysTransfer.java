@@ -40,7 +40,7 @@ public class NumSysTransfer {
             int denominator = (int) Math.pow(10, num.length());
 
             for (int i = 0; i < num.length() && i < 3; i++) {
-                double numeratorInDouble = Double.parseDouble(Character.toString(num.charAt(i))) * Math.pow(base, -(i + 1));
+                double numeratorInDouble = (double) (digitToVal(num.charAt(i))) * Math.pow(base, -(i + 1));
                 if (result.contains("-"))
                     result = Double.toString(Double.parseDouble(result) - numeratorInDouble);
                 else
@@ -104,7 +104,6 @@ public class NumSysTransfer {
     }
 
     private static String numSysTransfer(int startingNumSys, int numSysToTransfer, String num) {
-
         return convFromDeciToBase(convFromBaseToDeci(num, startingNumSys), numSysToTransfer);
     }
 
@@ -116,9 +115,7 @@ public class NumSysTransfer {
         System.out.print("Введіть систему числення в яку потрібно перевести: ");
         numSysToTransfer = sc.nextInt(); //система числення в яку переводимо
         System.out.print("Введіть число яке потрібно перевести: ");
-        num = sc.next();
-
+        num = sc.next(); //число яке переводимо
         System.out.println("Ваше число " + num + " з системи числення " + startingNumSys + " у системі числення " + numSysToTransfer + " дорівнює: " + numSysTransfer(startingNumSys, numSysToTransfer, num));
-
     }
 }
