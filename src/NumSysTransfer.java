@@ -105,13 +105,7 @@ public class NumSysTransfer {
     }
 
     private static String numSysTransfer(int startingNumSys, int numSysToTransfer, String num) {
-//        if (convFromBaseToDeci(num, startingNumSys).contains(".")) {
-//            double numInDeciDouble = Double.parseDouble(convFromBaseToDeci(num, startingNumSys)); // result of convFromBaseToDeci
-//            return convFromDeciToBase(numInDeciDouble, numSysToTransfer);
-//        } else {
-//            int numInDeciInt = Integer.parseInt(convFromBaseToDeci(num, startingNumSys));
-//            return convFromDeciToBase(numInDeciInt, numSysToTransfer);
-//        }
+
         return convFromDeciToBase(convFromBaseToDeci(num, startingNumSys), numSysToTransfer);
     }
 
@@ -120,11 +114,12 @@ public class NumSysTransfer {
         Scanner sc = new Scanner(System.in);
         System.out.print("Введіть початкову систему числення: ");
         startingNumSys = sc.nextInt(); //система числення з якої переводимо
-        System.out.print("Введіть систему числення в яку перевести: ");
+        System.out.print("Введіть систему числення в яку потрібно перевести: ");
         numSysToTransfer = sc.nextInt(); //система числення в яку переводимо
         System.out.print("Введіть число яке потрібно перевести: ");
         num = sc.next();
 
-        System.out.println(numSysTransfer(15, 7, "128.457"));
+        System.out.println("Ваше число " + num + " з системи числення " + startingNumSys + " у системі числення " + numSysToTransfer + " дорівнює: " + numSysTransfer(startingNumSys, numSysToTransfer, num));
+
     }
 }
