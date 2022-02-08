@@ -1,4 +1,3 @@
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Scanner;
 
 public class NumSysTransfer {
