@@ -35,18 +35,21 @@ public class NumSysTransfer {
                 result = "" + value;
             }
         }
-        result += ".0";
-        num = num.substring(Integer.toString(integerOfNum).length() + 1);
-        int denominator = (int) Math.pow(10, num.length());
+        if (num.contains(".")) {
+            result += ".0";
+            num = num.substring(Integer.toString(integerOfNum).length() + 1);
+            int denominator = (int) Math.pow(10, num.length());
 
-        for (int i = 0; i < num.length() && i < 3; i++) {
-            double numeratorInDouble = Double.parseDouble(Character.toString(num.charAt(i))) * Math.pow(base, -(i + 1));
-            if (result.contains("-"))
-                result = Double.toString(Double.parseDouble(result) - numeratorInDouble);
-            else
-                result = Double.toString(Double.parseDouble(result) + numeratorInDouble);
+            for (int i = 0; i < num.length() && i < 3; i++) {
+                double numeratorInDouble = Double.parseDouble(Character.toString(num.charAt(i))) * Math.pow(base, -(i + 1));
+                if (result.contains("-"))
+                    result = Double.toString(Double.parseDouble(result) - numeratorInDouble);
+                else
+                    result = Double.toString(Double.parseDouble(result) + numeratorInDouble);
+            }
+            return result.substring(0, Integer.toString(integerOfNum).length() + num.length() + 1); //повертаємо дріб у 10-вій системі
         }
-        return result.substring(0, Integer.toString(integerOfNum).length() + num.length() + 1); //повертаємо дріб у 10-вій системі
+        return result;
     }
 
     private static String convFromDeciToBase(String numInDeci, int base) {
@@ -54,72 +57,33 @@ public class NumSysTransfer {
         power = 1;
         value = 0;
         String numInRandomBase = "";
+
         double numInDeciDouble = Double.parseDouble(numInDeci);
         int integerOfNum = (int) numInDeciDouble;
         while (integerOfNum != 0) {
             numInRandomBase += valToDigit(Math.abs(integerOfNum) % base);
             integerOfNum /= base;
         }
-        result = new StringBuilder(numInRandomBase).reverse().toString() + ".";
+        result = new StringBuilder(numInRandomBase).reverse().toString();
         if (Double.parseDouble(numInDeci) < 0)
             result = "-" + result;
-        numInRandomBase = Double.toString(numInDeciDouble).substring(result.length(), numInDeci.length());
-        //int fractionInInt = Integer.parseInt(numInRandomBase);
-        int numerator = Integer.parseInt(numInRandomBase);
-        int denominator = (int) Math.pow(10, numInRandomBase.length());
-        numInRandomBase = "";
-        for (int i = 0; i < numInDeci.length() && i < 3; i++) {
-            numerator *= base;
-            numInRandomBase += valToDigit(numerator / denominator);
-            numerator %= denominator;
-            if (numerator == 0)
-                break;
+        if (numInDeci.contains(".")) {
+            result += ".";
+            numInRandomBase = Double.toString(numInDeciDouble).substring(result.length()-1);
+            //int fractionInInt = Integer.parseInt(numInRandomBase);
+            int numerator = Integer.parseInt(numInRandomBase);
+            int denominator = (int) Math.pow(10, numInRandomBase.length());
+            numInRandomBase = "";
+            for (int i = 0; i < numInDeci.length() && i < 3; i++) {
+                numerator *= base;
+                numInRandomBase += valToDigit(numerator / denominator);
+                numerator %= denominator;
+                if (numerator == 0)
+                    break;
+            }
+            result += numInRandomBase;
         }
-
-
-//        while (fractionInInt > 0) {
-//            numInRandomBase += valToDigit(fractionInInt * base);
-//            fractionInInt /= base;
-//        }
-        result += numInRandomBase;
         return result;
-        //result+=s;
-//        if ((int) numInDeciDouble < 0)
-//            result += "-";
-//        result = new
-//
-//                StringBuilder(result).
-//
-//                reverse().
-//
-//                toString();
-//
-//        numInDeci = numInDeci.substring(result.length() + 1);
-//        result += ".";
-//        int numerator = Integer.parseInt(numInDeci);
-//        int denominator = (int) Math.pow(10, numInDeci.length());
-//
-//        for (
-//                int i = 0; i < numInDeci.length() && i < 3; i++) {
-//            numerator *= base;
-//            result += symbols.charAt(numerator / denominator);
-//            numerator %= denominator;
-//            if (numerator == 0)
-//                break;
-//        }
-//        return result;
-//        } else {
-//            s = "";
-//            int numInDeciInt = Integer.parseInt(numInDeci);
-//            while (numInDeciInt != 0) {
-//                s += valToDigit(Math.abs(numInDeciInt) % base);
-//                numInDeciInt /= base;
-//            }
-//            result += s;
-//            if (Integer.parseInt(numInDeci) < 0)
-//                result += "-";
-//            return new StringBuffer(result).reverse().toString();
-//        }
     }
 
     private static int digitToVal(char c) {
@@ -160,7 +124,7 @@ public class NumSysTransfer {
 //        numSysToTransfer = sc.nextInt(); //система числення в яку переводимо
 //        System.out.print("Введіть число яке потрібно перевести: ");
 //        num = sc.next();
-        //System.out.println(convFromBaseToDeci("A.564", 12));
-        System.out.println(numSysTransfer(15, 7, "-12.564"));
+        //System.out.println(convFromBaseToDeci("A.642", 12));
+        System.out.println(numSysTransfer(15, 7, "AB"));
     }
 }
