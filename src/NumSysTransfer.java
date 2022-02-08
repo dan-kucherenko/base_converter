@@ -1,43 +1,43 @@
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Scanner;
+
 public class NumSysTransfer {
     private static int startingNumSys;
     private static int numSysToTransfer;
-    private static String numInDeci;
+    private static String num;
     private static int value = 0;
     private static int power = 1;
     private static String result = "";
-    //private static String symbols = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     private static String convFromBaseToDeci(String num, int base) {
         if (base < 2 || base > 36)
             return null;
-        String numAsString = "";
+        String integerOfNum = "";
         int digit;
-        for (int i = 0; i < num.length(); i++) {
-            digit = digitToVal(num.charAt(i));
-            if (digit == 46) {
-                digit = 0;
-                numAsString += ".";
-            } else if (digit == 45) {
-                digit = 0;
-                numAsString += "-";
-            } else
-                numAsString += Integer.toString(digit);
-        }
-        int integerOfNum = (int) Double.parseDouble(numAsString);
-        for (int i = Integer.toString(integerOfNum).length() - 1; i >= 0; i--) {
-            digit = digitToVal(Integer.toString(integerOfNum).charAt(i));
+
+        if (num.contains("."))
+            integerOfNum = num.substring(0, num.indexOf("."));
+        else
+            integerOfNum = num;
+        for (int i = integerOfNum.length() - 1; i >= 0; i--) {
+            digit = digitToVal(integerOfNum.charAt(i));
             if (digit == 45) {
                 digit = 0;
                 result = "-" + value;
+            } else if (digit == 46) {
+                digit = 0;
+                result = "" + value;
+
             } else {
                 value += digit * power;
                 power *= base;
-                result = "" + value;
+                result = value + "";
             }
         }
+
         if (num.contains(".")) {
             result += ".0";
-            num = num.substring(Integer.toString(integerOfNum).length() + 1);
+            num = num.substring(integerOfNum.length() + 1);
             int denominator = (int) Math.pow(10, num.length());
 
             for (int i = 0; i < num.length() && i < 3; i++) {
@@ -47,9 +47,10 @@ public class NumSysTransfer {
                 else
                     result = Double.toString(Double.parseDouble(result) + numeratorInDouble);
             }
-            return result.substring(0, Integer.toString(integerOfNum).length() + num.length() + 1); //повертаємо дріб у 10-вій системі
+            return result.substring(0, integerOfNum.length() + num.length() + 2);
         }
         return result;
+
     }
 
     private static String convFromDeciToBase(String numInDeci, int base) {
@@ -69,8 +70,7 @@ public class NumSysTransfer {
             result = "-" + result;
         if (numInDeci.contains(".")) {
             result += ".";
-            numInRandomBase = Double.toString(numInDeciDouble).substring(result.length()-1);
-            //int fractionInInt = Integer.parseInt(numInRandomBase);
+            numInRandomBase = numInDeci.substring(result.length());
             int numerator = Integer.parseInt(numInRandomBase);
             int denominator = (int) Math.pow(10, numInRandomBase.length());
             numInRandomBase = "";
@@ -117,14 +117,14 @@ public class NumSysTransfer {
 
 
     public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        System.out.print("Введіть початкову систему числення: ");
-//        startingNumSys = sc.nextInt(); //система числення з якої переводимо
-//        System.out.print("Введіть систему числення в яку перевести: ");
-//        numSysToTransfer = sc.nextInt(); //система числення в яку переводимо
-//        System.out.print("Введіть число яке потрібно перевести: ");
-//        num = sc.next();
-        //System.out.println(convFromBaseToDeci("A.642", 12));
-        System.out.println(numSysTransfer(15, 7, "AB"));
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Введіть початкову систему числення: ");
+        startingNumSys = sc.nextInt(); //система числення з якої переводимо
+        System.out.print("Введіть систему числення в яку перевести: ");
+        numSysToTransfer = sc.nextInt(); //система числення в яку переводимо
+        System.out.print("Введіть число яке потрібно перевести: ");
+        num = sc.next();
+
+        System.out.println(numSysTransfer(15, 7, "128.457"));
     }
 }
