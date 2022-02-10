@@ -46,7 +46,7 @@ public class NumSysTransfer {
                 else
                     result = Double.toString(Double.parseDouble(result) + numeratorInDouble);
             }
-            return result.substring(0, integerOfNum.length() + num.length() + 2);
+            return result.substring(0, integerOfNum.length() + num.length() + 3);
         }
         return result;
 
@@ -64,12 +64,13 @@ public class NumSysTransfer {
             numInRandomBase += valToDigit(Math.abs(integerOfNum) % base);
             integerOfNum /= base;
         }
+        integerOfNum = (int) numInDeciDouble;
         result = new StringBuilder(numInRandomBase).reverse().toString();
         if (Double.parseDouble(numInDeci) < 0)
             result = "-" + result;
         if (numInDeci.contains(".")) {
             result += ".";
-            numInRandomBase = numInDeci.substring(result.length());
+            numInRandomBase = numInDeci.substring(Integer.toString(integerOfNum).length() + 1);
             int numerator = Integer.parseInt(numInRandomBase);
             int denominator = (int) Math.pow(10, numInRandomBase.length());
             numInRandomBase = "";
