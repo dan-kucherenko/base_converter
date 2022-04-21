@@ -51,7 +51,6 @@ public class NumSysTransfer {
         return result;
 
     }
-
     private static String convFromDeciToBase(String numInDeci, int base) {
         result = "";
         power = 1;
